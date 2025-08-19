@@ -48,7 +48,7 @@ function App() {
     audio.pause();
     audio.currentTime = 0;
     setIsRunning(false);
-    setCount(0);
+    setCount(1);
     setSessionLength(25);
     setBreakLength(5);
     setTimeLeft(25 * 60);
