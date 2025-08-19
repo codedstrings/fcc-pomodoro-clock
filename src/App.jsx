@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,7 +12,7 @@ function App() {
     if (breakLength > 1) {
       setBreakLength(breakLength - 1);
     }
-  }  
+  };
   const handleBreakIncrement = () => {
     if (breakLength < 60) {
       setBreakLength(breakLength + 1);
@@ -22,25 +22,24 @@ function App() {
     if (sessionLength > 1) {
       setSessionLength(sessionLength - 1);
     }
-    if(!isRunning) {
+    if (!isRunning) {
       setTimeLeft((sessionLength - 1) * 60);
     }
-  }
+  };
   const handleSessionIncrement = () => {
     if (sessionLength < 60) {
       setSessionLength(sessionLength + 1);
     }
-    if(!isRunning) {
+    if (!isRunning) {
       setTimeLeft((sessionLength + 1) * 60);
     }
-  }
+  };
 
   const formatTime = (time) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-};
-
+  };
 
   return (
     <>
@@ -49,9 +48,13 @@ function App() {
         <div className="break-length">
           <h2 id="break-label">Break Length</h2>
           <div className="break-controls">
-            <button id="break-decrement" onClick={handleBreakDecrement}>-</button>
+            <button id="break-decrement" onClick={handleBreakDecrement}>
+              -
+            </button>
             <span id="break-length">{breakLength}</span>
-            <button id="break-increment" onClick={handleBreakIncrement}>+</button>
+            <button id="break-increment" onClick={handleBreakIncrement}>
+              +
+            </button>
           </div>
         </div>
       </div>
@@ -59,9 +62,13 @@ function App() {
         <div className="session-length">
           <h2 id="session-label">Session Length</h2>
           <div className="session-controls">
-            <button id="session-decrement" onClick={handleSessionDecrement}>-</button>
+            <button id="session-decrement" onClick={handleSessionDecrement}>
+              -
+            </button>
             <span id="session-length">{sessionLength}</span>
-            <button id="session-increment" onClick={handleSessionIncrement}>+</button>
+            <button id="session-increment" onClick={handleSessionIncrement}>
+              +
+            </button>
           </div>
         </div>
       </div>
@@ -74,7 +81,7 @@ function App() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
