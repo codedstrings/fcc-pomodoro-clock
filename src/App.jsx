@@ -16,6 +16,7 @@ function App() {
       if (!isSession) setTimeLeft((breakLength - 1) * 60);
     }
   };
+
   const handleBreakIncrement = () => {
     if (isRunning) return;
     if (breakLength < 60) {
@@ -23,6 +24,7 @@ function App() {
       if (!isSession) setTimeLeft((breakLength + 1) * 60);
     }
   };
+
   const handleSessionDecrement = () => {
     if (isRunning) return;
     if (sessionLength > 1) {
@@ -30,6 +32,7 @@ function App() {
       if (isSession) setTimeLeft((sessionLength - 1) * 60);
     }
   };
+
   const handleSessionIncrement = () => {
     if (isRunning) return;
     if (sessionLength < 60) {
@@ -43,10 +46,11 @@ function App() {
   };
 
   const handleReset = () => {
-    // Stop and reset the audio
     const audio = document.getElementById("beep");
+    if (audio) {
     audio.pause();
     audio.currentTime = 0;
+    }
     setIsRunning(false);
     setCount(1);
     setSessionLength(25);
@@ -88,36 +92,8 @@ function App() {
 
   return (
     <>
-      <h1>25 + 5 Clock</h1>
-      <div className="break-length-wrapper">
-        <div className="break-length">
-          <h2 id="break-label">Break Length</h2>
-          <div className="break-controls">
-            <button id="break-decrement" onClick={handleBreakDecrement}>
-              -
-            </button>
-            <span id="break-length">{breakLength}</span>
-            <button id="break-increment" onClick={handleBreakIncrement}>
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="session-length-wrapper">
-        <div className="session-length">
-          <h2 id="session-label">Session Length</h2>
-          <div className="session-controls">
-            <button id="session-decrement" onClick={handleSessionDecrement}>
-              -
-            </button>
-            <span id="session-length">{sessionLength}</span>
-            <button id="session-increment" onClick={handleSessionIncrement}>
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="timer-wrapper">
+      <h1 className="hero-text">25 + 5 Clock</h1>
+      <div className={`timer-wrapper ${isRunning ? 'running' : ''}`}>
         <h2 id="timer-label">
           {isSession ? "Session " : "Break "}
           {count}
@@ -125,13 +101,47 @@ function App() {
         <h1 id="time-left">{formatTime(timeLeft)}</h1>
         <div className="timer-controls">
           <button id="start_stop" onClick={handleStartStop}>
-            Start/Stop
+            {isRunning ? "Pause" : "Start"}
           </button>
           <button id="reset" onClick={handleReset}>
             Reset
           </button>
         </div>
       </div>
+
+      <div className="controls-wrapper">
+        <div className="break-length-wrapper">
+          <div className="break-length">
+            <h2 id="break-label">Break Length</h2>
+            <div className="break-controls">
+              <button id="break-decrement" className="time-control-buttons" onClick={handleBreakDecrement}>
+                −
+              </button>
+              <span id="break-length">{breakLength}</span>
+              <button id="break-increment" className="time-control-buttons" onClick={handleBreakIncrement}>
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="session-length-wrapper">
+          <div className="session-length">
+            <h2 id="session-label">Session Length</h2>
+            <div className="session-controls">
+              <button id="session-decrement" className="time-control-buttons" onClick={handleSessionDecrement}>
+                −
+              </button>
+              <span id="session-length">{sessionLength}</span>
+              <button id="session-increment" className="time-control-buttons" onClick={handleSessionIncrement}>
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
       <audio
         id="beep"
         src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
