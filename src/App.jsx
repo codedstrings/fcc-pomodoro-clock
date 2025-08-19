@@ -10,25 +10,31 @@ function App() {
   const [isSession, setIsSession] = useState(true);
 
   const handleBreakDecrement = () => {
-    if (breakLength > 1 && !isRunning) {
+    if (isRunning) return; // Prevent decrementing while running
+    if (breakLength > 1) {
       setBreakLength(breakLength - 1);
+      if (!isSession) setTimeLeft((breakLength - 1) * 60);
     }
   };
   const handleBreakIncrement = () => {
-    if (breakLength < 60 && !isRunning) {
+    if (isRunning) return;
+    if (breakLength < 60) {
       setBreakLength(breakLength + 1);
+      if (!isSession) setTimeLeft((breakLength + 1) * 60);
     }
   };
   const handleSessionDecrement = () => {
-    if (sessionLength > 1 && !isRunning) {
+    if (isRunning) return;
+    if (sessionLength > 1) {
       setSessionLength(sessionLength - 1);
-      setTimeLeft((sessionLength - 1) * 60);
+      if (isSession) setTimeLeft((sessionLength - 1) * 60);
     }
   };
   const handleSessionIncrement = () => {
-    if (sessionLength < 60 && !isRunning) {
+    if (isRunning) return;
+    if (sessionLength < 60) {
       setSessionLength(sessionLength + 1);
-      setTimeLeft((sessionLength + 1) * 60);
+      if (isSession) setTimeLeft((sessionLength + 1) * 60);
     }
   };
 
