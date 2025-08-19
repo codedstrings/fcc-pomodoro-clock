@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [sessionLength, setSessionLength] = useState(25);
   const [breakLength, setBreakLength] = useState(5);
   const [isRunning, setIsRunning] = useState(false);
@@ -55,7 +55,18 @@ function App() {
       // Clean up the timer when this effect runs again
       return () => clearInterval(timer);
     }
-  }, [isRunning, timeLeft]);
+    else if (timeLeft === 0) {
+      // Switch between session and break when time runs out
+      if (isSession) {
+        setTimeLeft(breakLength * 60);
+        setIsSession(false);
+      } else {
+        setTimeLeft(sessionLength * 60);
+        setCount(count + 1);
+        setIsSession(true);
+      }
+    }
+  }, [breakLength, count, isRunning, isSession, sessionLength, timeLeft]);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -95,11 +106,15 @@ function App() {
         </div>
       </div>
       <div className="timer-wrapper">
-        <h2 id="timer-label">Session {count}</h2>
+        <h2 id="timer-label">{isSession ? "Session " : "Break "}{count}</h2>
         <h1 id="time-left">{formatTime(timeLeft)}</h1>
         <div className="timer-controls">
-          <button id="start_stop" onClick={handleStartStop}>Start/Stop</button>
-          <button id="reset" onClick={handleReset}>Reset</button>
+          <button id="start_stop" onClick={handleStartStop}>
+            Start/Stop
+          </button>
+          <button id="reset" onClick={handleReset}>
+            Reset
+          </button>
         </div>
       </div>
     </>
