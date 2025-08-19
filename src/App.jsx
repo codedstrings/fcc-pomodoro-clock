@@ -43,13 +43,17 @@ function App() {
   };
 
   const handleReset = () => {
+    // Stop and reset the audio
+    const audio = document.getElementById("beep");
+    audio.pause();
+    audio.currentTime = 0;
     setIsRunning(false);
     setCount(0);
     setSessionLength(25);
     setBreakLength(5);
     setTimeLeft(25 * 60);
     setIsSession(true);
-  }
+  };
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
@@ -60,9 +64,11 @@ function App() {
 
       // Clean up the timer when this effect runs again
       return () => clearInterval(timer);
-    }
-    else if (timeLeft === 0) {
-      // Switch between session and break when time runs out
+    } else if (timeLeft === 0) {
+      // Play the beep sound when the timer reaches zero
+      document.getElementById("beep").play();
+
+      // Switch between session and break
       if (isSession) {
         setTimeLeft(breakLength * 60);
         setIsSession(false);
@@ -112,7 +118,10 @@ function App() {
         </div>
       </div>
       <div className="timer-wrapper">
-        <h2 id="timer-label">{isSession ? "Session " : "Break "}{count}</h2>
+        <h2 id="timer-label">
+          {isSession ? "Session " : "Break "}
+          {count}
+        </h2>
         <h1 id="time-left">{formatTime(timeLeft)}</h1>
         <div className="timer-controls">
           <button id="start_stop" onClick={handleStartStop}>
@@ -123,6 +132,11 @@ function App() {
           </button>
         </div>
       </div>
+      <audio
+        id="beep"
+        src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
+        preload="auto"
+      />
     </>
   );
 }
