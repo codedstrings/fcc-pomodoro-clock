@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -7,33 +7,55 @@ function App() {
   const [breakLength, setBreakLength] = useState(5);
   const [isRunning, setIsRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(sessionLength * 60);
+  const [isSession, setIsSession] = useState(true);
 
   const handleBreakDecrement = () => {
-    if (breakLength > 1) {
+    if (breakLength > 1 && !isRunning) {
       setBreakLength(breakLength - 1);
     }
   };
   const handleBreakIncrement = () => {
-    if (breakLength < 60) {
+    if (breakLength < 60 && !isRunning) {
       setBreakLength(breakLength + 1);
     }
   };
   const handleSessionDecrement = () => {
-    if (sessionLength > 1) {
+    if (sessionLength > 1 && !isRunning) {
       setSessionLength(sessionLength - 1);
-    }
-    if (!isRunning) {
       setTimeLeft((sessionLength - 1) * 60);
     }
   };
   const handleSessionIncrement = () => {
-    if (sessionLength < 60) {
+    if (sessionLength < 60 && !isRunning) {
       setSessionLength(sessionLength + 1);
-    }
-    if (!isRunning) {
       setTimeLeft((sessionLength + 1) * 60);
     }
   };
+
+  const handleStartStop = () => {
+    setIsRunning(!isRunning);
+  };
+
+  const handleReset = () => {
+    setIsRunning(false);
+    setCount(0);
+    setSessionLength(25);
+    setBreakLength(5);
+    setTimeLeft(25 * 60);
+    setIsSession(true);
+  }
+
+  useEffect(() => {
+    if (isRunning && timeLeft > 0) {
+      // Set up a timer that runs every 1000ms (1 second)
+      const timer = setInterval(() => {
+        setTimeLeft(timeLeft - 1); // subtract 1 second
+      }, 1000);
+
+      // Clean up the timer when this effect runs again
+      return () => clearInterval(timer);
+    }
+  }, [isRunning, timeLeft]);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -76,8 +98,8 @@ function App() {
         <h2 id="timer-label">Session {count}</h2>
         <h1 id="time-left">{formatTime(timeLeft)}</h1>
         <div className="timer-controls">
-          <button id="start_stop">Start/Stop</button>
-          <button id="reset">Reset</button>
+          <button id="start_stop" onClick={handleStartStop}>Start/Stop</button>
+          <button id="reset" onClick={handleReset}>Reset</button>
         </div>
       </div>
     </>
